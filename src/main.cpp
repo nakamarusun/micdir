@@ -56,6 +56,18 @@ void unvalid_event() {
 
 void calculate_direction() {
   float deg = acos((mics[mic_order[1]].time * SOUND_V) / DISTANCE);
+
+  float res;
+  if (mic_order[0] == 0) {
+    if (mic_order[1] == 1) res = deg - PI/6;
+    else if (mic_order[1] == 2) res = PI*13/6 - deg;
+  } else if (mic_order[1] == 1) {
+    if (mic_order[1] == 0) res = PI*5/6 - deg;
+    else if (mic_order[1] == 2) res = deg + PI/2;
+  } else if (mic_order[1] == 2) {
+    if (mic_order[1] == 1) res = PI*3/2 - deg;
+    else if (mic_order[1] == 0) res = deg + PI*7/6;
+  }
   // TODO: Send signal to master device
 
   // Reset sensors
