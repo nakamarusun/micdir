@@ -20,10 +20,9 @@ uint32_t micros() {
 
 #define SOUND_TIME 100000 // Sound duration
 // Time of microphone triggers (Ordered per pin)
-uint32_t dets[] = {4380765, 4380000, 4381457};
+uint32_t dets[] = {4380077, 4380000, 4380146};
 uint8_t digitalRead(uint8_t pin) {
-
-  return dets[pin] > _curtime && dets[pin] < (_curtime + SOUND_TIME);
+  return _curtime > dets[pin] && _curtime < (dets[pin]  + SOUND_TIME);
 }
 
 // Load the microcontroller file
@@ -33,16 +32,21 @@ uint8_t digitalRead(uint8_t pin) {
 template <typename T>
 void assert_equal(const char test[], T a, T b) {
   printf("Assertion (%s) returns ", test);
-  if (a == b) printf("[SUCCESS]\n"); else printf("FAILURE\n"); exit(1);
+  if (a == b) {
+    printf("[SUCCESS]\n");
+  } else {
+    printf("FAILURE\n");
+    exit(1);
+  }
 }
 #define ASSERT_EQUAL assert_equal // Biar keren :v
-
 #define STOP_AFTER 5000000 // Stop the program after x seconds has passed (us)
 
 
 // When the sensors have determined a direction
 void on_detection(double direction) {
-  printf("Detected direction: %f", direction);
+  printf("Detected direction: %f\n", direction * 180 / PI);
+  printf("Test done, simulated time: %dus", _curtime);
   exit(0);
 }
 
