@@ -1,7 +1,3 @@
-#ifndef TEST
-#include <Arduino.h>
-#endif
-
 #include "logic.h"
 
 uint8_t valid = 0;
