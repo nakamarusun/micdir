@@ -29,10 +29,10 @@ void unvalid_event() {
 }
 
 // Calculates the sound source direction based on the delta and mic heard order
-double calculate_direction() {
-  double deg = acos((mics[mic_order[1]].time / 1000000.0 * SOUND_V) / DISTANCE);
+float calculate_direction() {
+  float deg = acos((mics[mic_order[1]].time / 1000000.0 * SOUND_V) / DISTANCE);
 
-  double res = 0;
+  float res = 0;
   if (mic_order[0] == 0) {
     if (mic_order[1] == 1) res = deg - PI/6;
     else if (mic_order[1] == 2) res = PI*13/6 - deg;
@@ -48,7 +48,7 @@ double calculate_direction() {
 }
 
 
-void loop_on_detection(void (*func)(double)) {
+void loop_on_detection(void (*func)(float)) {
   // Read mic pins
   uint8_t mic1_pin = digitalRead(MIC1_PIN);
   uint8_t mic2_pin = digitalRead(MIC2_PIN);

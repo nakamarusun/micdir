@@ -41,12 +41,12 @@ extern mic_ mics[3];
 void unvalid_event();
 
 // Calculates the sound source direction based on the delta and mic heard order
-double calculate_direction();
+float calculate_direction();
 
 // The main loop of the program that detects sound and calculates the direction
 // The callback that is passed into this function will be called after a full
 // triangulation has been done, and the direction of the sound will be passed
 // as an argument. (Radians)
-void loop_on_detection(void (*func)(double));
+void loop_on_detection(void (*func)(float));
 
 #endif

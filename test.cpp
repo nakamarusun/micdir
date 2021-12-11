@@ -69,7 +69,7 @@ void reset_test_sensor() {
 }
 
 // When the sensors have determined a direction
-void on_detection(double direction) {
+void on_detection(float direction) {
   printf("Detected direction: %f\n", direction * 180 / PI);
   
   // If all detection is not done, reset sensor and continue
