@@ -5,7 +5,7 @@
 #include <Arduino.h>
 #endif
 
-#define DISTANCE 0.05 // (m)
+#define DISTANCE 0.065 // (m)
 #define SOUND_V 343.0 // (m/s)
 
 // Pin definition
