@@ -9,9 +9,9 @@
 #define SOUND_V 343.0 // (m/s)
 
 // Pin definition
-#define MIC1_PIN 0
-#define MIC2_PIN 1
-#define MIC3_PIN 2
+#define MIC1_PIN 5
+#define MIC2_PIN 3
+#define MIC3_PIN 4
 
 // Variables to check if a current signal is still valid
 #define VALID_TIME 200000 // 200ms

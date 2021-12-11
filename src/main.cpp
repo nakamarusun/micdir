@@ -2,7 +2,7 @@
 #include <Wire.h>
 #include "logic.h"
 
-#define SLAVE_ADDRESS 0x4
+#define SLAVE_ADDRESS 0x5e
 
 float last_direction = 0; // Last direction that the sensor detects
 
