@@ -56,7 +56,7 @@ void loop_on_detection(void (*func)(float)) {
 
   // If any of the pins are high, execute first event
   if (mic1_pin || mic2_pin || mic3_pin) {
-    if (micros() > unvalid_time) {
+    if (valid && micros() > unvalid_time) {
       // Check if the time is valid, then reset the state of the algorithm
       unvalid_event();
     }
