@@ -35,9 +35,17 @@ void setup() {
   Wire.begin(SLAVE_ADDRESS);
 
   // Initialize pins
-  pinMode(MIC1_PIN, INPUT);
-  pinMode(MIC2_PIN, INPUT);
-  pinMode(MIC3_PIN, INPUT);
+  // pinMode(MIC1_PIN, INPUT);
+  // pinMode(MIC2_PIN, INPUT);
+  // pinMode(MIC3_PIN, INPUT);
+
+  DDRB &= ~(1 << MIC1_PIN);
+  DDRB &= ~(1 << MIC2_PIN);
+  DDRB &= ~(1 << MIC3_PIN);
+
+  PORTB |= (1 << MIC1_PIN);
+  PORTB |= (1 << MIC2_PIN);
+  PORTB |= (1 << MIC3_PIN);
 
   // pinMode(LED_PIN, OUTPUT);
 

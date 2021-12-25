@@ -61,6 +61,10 @@ uint8_t digitalRead(uint8_t pin) {
   return false;
 }
 
+#define READMIC1 digitalRead(MIC1_PIN)
+#define READMIC2 digitalRead(MIC2_PIN)
+#define READMIC3 digitalRead(MIC3_PIN)
+
 // Load the microcontroller file
 #include "src/logic.cpp"
 

@@ -1,17 +1,22 @@
 #ifndef LOGIC_MIC
 #define LOGIC_MIC
 
-#ifndef TEST
-#include <Arduino.h>
-#endif
-
-#define DISTANCE 0.065 // (m)
-#define SOUND_V 343.0 // (m/s)
-
 // Pin definition
 #define MIC1_PIN 1
 #define MIC2_PIN 3
 #define MIC3_PIN 4
+
+#ifndef TEST
+#include <Arduino.h>
+#include <avr/io.h>
+
+#define READMIC1 PINB & (1 << MIC1_PIN)
+#define READMIC2 PINB & (1 << MIC2_PIN)
+#define READMIC3 PINB & (1 << MIC3_PIN)
+#endif
+
+#define DISTANCE 0.065 // (m)
+#define SOUND_V 343.0 // (m/s)
 
 // Variables to check if a current signal is still valid
 #define VALID_TIME 200000 // 200ms

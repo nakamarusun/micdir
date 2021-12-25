@@ -54,9 +54,13 @@ void all_sound(void (*func)(float)) {
 
 void loop_on_detection(void (*func)(float)) {
   // Read mic pins
-  uint8_t mic1_pin = digitalRead(MIC1_PIN);
-  uint8_t mic2_pin = digitalRead(MIC2_PIN);
-  uint8_t mic3_pin = digitalRead(MIC3_PIN);
+  // uint8_t mic1_pin = digitalRead(MIC1_PIN);
+  // uint8_t mic2_pin = digitalRead(MIC2_PIN);
+  // uint8_t mic3_pin = digitalRead(MIC3_PIN);
+
+  uint8_t mic1_pin = READMIC1;
+  uint8_t mic2_pin = READMIC2;
+  uint8_t mic3_pin = READMIC3;
 
   unsigned long micro = micros();
 
