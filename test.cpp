@@ -105,7 +105,7 @@ void on_detection(float direction) {
   if ((mul_i + 1) < (sizeof(dets_multi)/sizeof(dets_multi[0]))) {
     reset_test_sensor();
   } else {
-    printf("Test done, simulated time: %dus", _curtime);
+    printf("Test done, simulated time: %dus\n", _curtime);
     exit(0);
   }
 }

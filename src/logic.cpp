@@ -1,4 +1,5 @@
 #include "logic.h"
+#include <Arduino.h>
 
 uint8_t valid = 0;
 uint32_t unvalid_time = 0;
@@ -6,7 +7,6 @@ uint32_t unvalid_time = 0;
 // Mic variables
 uint32_t sound_first; // Timestamp of first time sound is heard
 uint8_t sound_heard = 0; // Whether a sound is heard in the duration
-uint8_t all_sound = 0; // Whether all mic have heard a sound once
 
 uint8_t mic_order_i = 0; // Index to keep track of the order of the mic
 uint8_t mic_order[3]; // The order of the mic
@@ -19,7 +19,6 @@ void unvalid_event() {
   // Reset everything
   valid = 0;
   sound_heard = 0;
-  all_sound = 0;
   mic_order_i = 0;
   
   // Reset mic activated state
@@ -30,7 +29,7 @@ void unvalid_event() {
 
 // Calculates the sound source direction based on the delta and mic heard order
 float calculate_direction() {
-  float deg = acos((mics[mic_order[1]].time / 1000000.0 * SOUND_V) / DISTANCE);
+  float deg = constrain(acos((mics[mic_order[1]].time / 1000000.0 * SOUND_V) / DISTANCE), -1.0, 1.0);
 
   float res = 0;
   if (mic_order[0] == 0) {
@@ -47,6 +46,12 @@ float calculate_direction() {
   return res;
 }
 
+// Function will be called if all of the sound has been detected.
+// If all mic has heard a sound once, calculate direction and reset.
+void all_sound(void (*func)(float)) {
+  func(calculate_direction());
+  unvalid_event();
+}
 
 void loop_on_detection(void (*func)(float)) {
   // Read mic pins
@@ -54,38 +59,31 @@ void loop_on_detection(void (*func)(float)) {
   uint8_t mic2_pin = digitalRead(MIC2_PIN);
   uint8_t mic3_pin = digitalRead(MIC3_PIN);
 
+  unsigned long micro = micros();
+
+  if (valid && micro > unvalid_time) {
+    // Check if the time is valid, then reset the state of the algorithm
+    unvalid_event();
+  }
+
   // If any of the pins are high, execute first event
   if (mic1_pin || mic2_pin || mic3_pin) {
-    if (valid && micros() > unvalid_time) {
-      // Check if the time is valid, then reset the state of the algorithm
-      unvalid_event();
-    }
-
     if (!valid) {
       // Set timestamp
       valid = 1;
-      unvalid_time = micros() + VALID_TIME;
+      unvalid_time = micro + VALID_TIME;
     }
 
-    // If the sound is valid
-    if (valid) {
-      if (!sound_heard) {
-        // Check if sound has been heard, and record the time
-        sound_heard = 1;
-        sound_first = micros();
-      }
-
-      // Record first time for each mic and detect if all mic has heard a sound.
-      // If all mic has heard a sound once, calculate direction
-      if (!mics[0].act && mic1_pin) { mics[0].act = 1; mics[0].time = micros() - sound_first; mic_order[mic_order_i++] = 0; if (mics[1].act && mics[2].act) all_sound = 1; }
-      if (!mics[1].act && mic2_pin) { mics[1].act = 1; mics[1].time = micros() - sound_first; mic_order[mic_order_i++] = 1; if (mics[0].act && mics[2].act) all_sound = 1; }
-      if (!mics[2].act && mic3_pin) { mics[2].act = 1; mics[2].time = micros() - sound_first; mic_order[mic_order_i++] = 2; if (mics[0].act && mics[1].act) all_sound = 1; }
-
-      // If all mic has heard a sound once, calculate direction and reset.
-      if (all_sound) {
-        unvalid_event();
-        func(calculate_direction());
-      }
+    if (!sound_heard) {
+      // Check if sound has been heard, and record the time
+      sound_heard = 1;
+      sound_first = micro;
     }
+
+    // Record first time for each mic and detect if all mic has heard a sound.
+    // If all mic has heard a sound once, calculate direction
+    if (!mics[0].act && mic1_pin) { mics[0].act = 1; mics[0].time = micro - sound_first; mic_order[mic_order_i++] = 0; if (mics[1].act && mics[2].act) all_sound(func); }
+    if (!mics[1].act && mic2_pin) { mics[1].act = 1; mics[1].time = micro - sound_first; mic_order[mic_order_i++] = 1; if (mics[0].act && mics[2].act) all_sound(func); }
+    if (!mics[2].act && mic3_pin) { mics[2].act = 1; mics[2].time = micro - sound_first; mic_order[mic_order_i++] = 2; if (mics[0].act && mics[1].act) all_sound(func); }
   }
 }

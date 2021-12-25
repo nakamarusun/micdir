@@ -6,7 +6,7 @@
 #define SLAVE_ADDRESS 0x5e
 
 // Turns on LED if there is a new data, turn off if the new data is read
-#define LED_PIN 1
+// #define LED_PIN 5
 
 float last_direction = 0; // Last direction that the sensor detects
 
@@ -17,17 +17,17 @@ void on_detection(float direction) {
   last_direction = direction;
   new_data = 1;
 
-  digitalWrite(LED_PIN, 1);
+  // digitalWrite(LED_PIN, 1);
 }
 
 void send_data() {
   char buf_fl[10];
   char buf[12];
   dtostrf(last_direction, 5, 3, buf_fl); // Convert to string
-  sprintf(buf, "%d.%s", new_data, buf_fl); // Construct string
+  sprintf(buf, "%d,%s", new_data, buf_fl); // Construct string
   Wire.write(buf); // Send
   new_data = 0;
-  digitalWrite(LED_PIN, 0);
+  // digitalWrite(LED_PIN, 0);
 }
 
 void setup() {
@@ -39,7 +39,7 @@ void setup() {
   pinMode(MIC2_PIN, INPUT);
   pinMode(MIC3_PIN, INPUT);
 
-  pinMode(LED_PIN, OUTPUT);
+  // pinMode(LED_PIN, OUTPUT);
 
   Wire.onRequest(&send_data);
 }
