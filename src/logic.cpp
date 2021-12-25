@@ -1,5 +1,4 @@
 #include "logic.h"
-#include <Arduino.h>
 
 uint8_t valid = 0;
 uint32_t unvalid_time = 0;
@@ -29,7 +28,7 @@ void unvalid_event() {
 
 // Calculates the sound source direction based on the delta and mic heard order
 float calculate_direction() {
-  float deg = constrain(acos((mics[mic_order[1]].time / 1000000.0 * SOUND_V) / DISTANCE), -1.0, 1.0);
+  float deg = acos(constrain((mics[mic_order[1]].time / 1000000.0 * SOUND_V) / DISTANCE, -1.0, 1.0));
 
   float res = 0;
   if (mic_order[0] == 0) {

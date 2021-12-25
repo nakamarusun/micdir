@@ -10,11 +10,13 @@ typedef unsigned int uint8_t;
 typedef unsigned int uint32_t;
 
 #define PI 3.14159
-#define ACCURACY_ANGLE 15
+#define ACCURACY_ANGLE 60
 
 // The amount that micro increments (default 8) according to
 // https://www.arduino.cc/reference/en/language/functions/time/micros/
 #define INCREMENT_MICRO 8
+
+#define constrain(amt,low,high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
 
 uint32_t _curtime = 0;
 uint32_t micros() {
